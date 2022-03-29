@@ -59,9 +59,7 @@ function SignInScreen() {
   return (
     <div>
       <Row justify="center" align="top">
-      <Col >
-        
-      
+      <Col>
       <h1>My App</h1>
       <p>Welcome {firebase.auth().currentUser?.email}! You are now signed-in!</p>
       <Space align="center">
