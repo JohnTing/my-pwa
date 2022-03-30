@@ -4,18 +4,19 @@ import { useEffect, useState } from "react";
 import { child, Database, DataSnapshot, get, getDatabase, onValue, orderByChild, query, ref, set } from "firebase/database";
 
 import { message, Table } from "antd";
+import moment from "moment";
 
 type dataT = {
   username: string,
   email: string,
-  profile_picture: string
+  other: string
 }
 
 type dataTid = {
   key: number,
   username: string,
   email: string,
-  profile_picture: string
+  other: string
 }
 
 
@@ -31,8 +32,14 @@ export default function SignedIn() {
 
     const unregisterAuthObserver = firebase.auth().onAuthStateChanged(user => {
       setUser(user);
-      if(user)
-        pushUserData(user.uid, { username: 'name', email: 'email', profile_picture: 'pic' })
+      if(user) {
+        pushUserData(user.uid, { username: ""+user.displayName, email: ""+user.email, other: "" + user.emailVerified })
+
+        user.getIdToken(true).then((token) => {console.log(token)})
+        
+
+
+      }
     });
     return () => unregisterAuthObserver(); // Make sure we un-register Firebase observers when the component unmounts.
   }, []);
@@ -104,6 +111,7 @@ export default function SignedIn() {
       title: 'key',
       dataIndex: 'key',
       key: 'key',
+      render: (text: number) => <>{moment.unix(text).toLocaleString()}</>
     },
     {
       title: 'username',
@@ -116,9 +124,9 @@ export default function SignedIn() {
       key: 'email',
     },
     {
-      title: 'profile_picture',
-      dataIndex: 'profile_picture',
-      key: 'profile_picture',
+      title: 'other',
+      dataIndex: 'other',
+      key: 'other',
     },
   ];
 
