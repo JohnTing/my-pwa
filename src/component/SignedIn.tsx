@@ -1,10 +1,18 @@
 
-import firebase from "firebase/compat/app";
 import { useEffect, useState } from "react";
-import { child, Database, DataSnapshot, get, getDatabase, onValue, orderByChild, query, ref, set } from "firebase/database";
+import { child, get, getDatabase, onValue, ref, set } from "firebase/database";
 
-import { message, Table } from "antd";
+import { Table } from "antd";
 import moment from "moment";
+
+import { getAuth, User } from "firebase/auth";
+
+
+// import { getMessaging, getToken, onMessage } from "firebase/messaging";
+
+
+
+// const PUBLIC_VAPID_KEY = "BMH_PRGL8WPnyUg5DtvvMzIOdex-uEVMYJYj2V9ariIyGxgQeMcTlzYXlqE-NlVLyYn0BARhMsa8nX36f6Tkbtw"
 
 type dataT = {
   username: string,
@@ -20,9 +28,10 @@ type dataTid = {
 }
 
 
+
 export default function SignedIn() {
 
-  const [user, setUser] = useState(firebase.auth().currentUser); // Local signed-in state.
+  const [user, setUser] = useState<User>(); // Local signed-in state.
   const [dataVal, setDataVal] = useState<dataT>();
 
   const [loginDatas, setLoginDatas] = useState<dataT[]>();
@@ -30,19 +39,23 @@ export default function SignedIn() {
   // Listen to the Firebase Auth state and set the local state.
   useEffect(() => {
 
-    const unregisterAuthObserver = firebase.auth().onAuthStateChanged(user => {
-      setUser(user);
+    const unregisterAuthObserver = getAuth().onAuthStateChanged(user => {
+      
       if(user) {
+        setUser(user);
         pushUserData(user.uid, { username: ""+user.displayName, email: ""+user.email, other: "" + user.emailVerified })
 
         user.getIdToken(true).then((token) => {console.log(token)})
-        
-
-
       }
     });
+
     return () => unregisterAuthObserver(); // Make sure we un-register Firebase observers when the component unmounts.
   }, []);
+
+
+
+  
+
 
 
   function pushUserData(userId: string, data: dataT) {
@@ -51,7 +64,7 @@ export default function SignedIn() {
     }
     const db = getDatabase();
 
-    set(ref(db, `users/${userId}/list/${new Date().getTime()}/`), {
+    set(ref(db, `users/${userId}/list/${moment.now()}/`), {
       ...data
     });
   }
@@ -111,7 +124,7 @@ export default function SignedIn() {
       title: 'key',
       dataIndex: 'key',
       key: 'key',
-      render: (text: number) => <>{moment.unix(text).toLocaleString()}</>
+      render: (text: number) => <>{moment.unix(text/1000).toLocaleString()}</>
     },
     {
       title: 'username',
