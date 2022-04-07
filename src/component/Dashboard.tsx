@@ -29,7 +29,7 @@ type dataTid = {
 
 
 
-export default function SignedIn() {
+export default function Dashboard() {
 
   const [user, setUser] = useState<User>(); // Local signed-in state.
   const [dataVal, setDataVal] = useState<dataT>();
@@ -45,7 +45,7 @@ export default function SignedIn() {
         setUser(user);
         pushUserData(user.uid, { username: ""+user.displayName, email: ""+user.email, other: "" + user.emailVerified })
 
-        user.getIdToken(true).then((token) => {console.log(token)})
+        // user.getIdToken(true).then((token) => {console.log(token)})
       }
     });
 
@@ -79,7 +79,7 @@ export default function SignedIn() {
     get(child(dbRef, `users/${userId}`)).then((snapshot) => {
       if (snapshot.exists()) {
         setDataVal(snapshot.val() as dataT)
-        console.log(snapshot.val());
+        //console.log(snapshot.val());
       } else {
         console.log("No data available");
       }
@@ -146,10 +146,8 @@ export default function SignedIn() {
 
 
   return (<>
-    <h1>Name: {user?.email} <br /></h1>
-    <h2>username: {dataVal?.username}</h2>
-
-    <Table dataSource={loginDatas} columns={columns} />;
+    <h2>email: {user?.email} <br /></h2>
+    <Table dataSource={loginDatas} columns={columns} scroll={{x:true}} />;
 
 
     

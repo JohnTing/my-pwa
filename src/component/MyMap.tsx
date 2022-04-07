@@ -22,8 +22,7 @@ export default function MyMap() {
     }).addTo(map);
 
     setMyMap(map);
-
-
+    
     const watchID = navigator.geolocation.watchPosition((position) => {
       setPosition(position)
 
@@ -63,10 +62,7 @@ export default function MyMap() {
     if (myMap && position) {
       myMap.setView([position.coords.latitude, position.coords.longitude])
     }
-
   }
-
-
 
   return (
     <div id="map" style={{ height: "100%", width: "100%" }}>
