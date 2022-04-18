@@ -1,14 +1,3 @@
-
-importScripts('https://www.gstatic.com/firebasejs/4.8.1/firebase-app.js');
-importScripts('https://www.gstatic.com/firebasejs/4.8.1/firebase-messaging.js');
-
-firebase.initializeApp({
-  messagingSenderId: "831281444587"
-});
-
-const messaging = firebase.messaging();
-
-
 /*
 importScripts('https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js');
 importScripts('https://www.gstatic.com/firebasejs/9.0.0/firebase-messaging-compat.js');
